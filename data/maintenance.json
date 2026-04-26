@@ -1,0 +1,46 @@
+[
+  {
+    "tower_id": "T-001",
+    "location_description": "Mile marker 2.3, adjacent to County Road 15",
+    "last_inspection": "2024-08-15",
+    "last_finding": "minor_corrosion",
+    "years_in_service": 34,
+    "maintenance_status": "deferred",
+    "next_scheduled": "2025-06-01",
+    "voltage": "230kV",
+    "linked_finding_id": 3
+  },
+  {
+    "tower_id": "T-002",
+    "location_description": "Mile marker 3.1, crossing over Elm Creek",
+    "last_inspection": "2025-01-20",
+    "last_finding": "vegetation_warning",
+    "years_in_service": 28,
+    "maintenance_status": "overdue",
+    "next_scheduled": "2025-03-15",
+    "voltage": "230kV",
+    "linked_finding_id": 2
+  },
+  {
+    "tower_id": "T-003",
+    "location_description": "Mile marker 4.7, near substation Delta",
+    "last_inspection": "2025-09-10",
+    "last_finding": "clear",
+    "years_in_service": 12,
+    "maintenance_status": "current",
+    "next_scheduled": "2026-09-10",
+    "voltage": "230kV",
+    "linked_finding_id": null
+  },
+  {
+    "tower_id": "T-004",
+    "location_description": "Mile marker 5.2, residential area boundary",
+    "last_inspection": "2024-11-01",
+    "last_finding": "insulator_discoloration",
+    "years_in_service": 41,
+    "maintenance_status": "deferred",
+    "next_scheduled": "2025-04-01",
+    "voltage": "230kV",
+    "linked_finding_id": 5
+  }
+]

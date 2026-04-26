@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --color-surface-0: #f8f9fb;
+  --color-surface-1: #ffffff;
+  --color-surface-2: #f1f3f5;
+  --color-surface-3: #e5e7eb;
+  --color-border: #d1d5db;
+  --color-text-primary: #111827;
+  --color-text-secondary: #6b7280;
+  --color-critical: #dc2626;
+  --color-high: #ea580c;
+  --color-moderate: #ca8a04;
+  --color-low: #16a34a;
+  --color-accent: #2563eb;
+}
+
+@utility border-l-3 {
+  border-left-width: 3px;
+}
+
+body {
+  background-color: var(--color-surface-0);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-surface-2); }
+::-webkit-scrollbar-thumb { background: var(--color-surface-3); border-radius: 3px; }
+
+.chat-message p { margin-bottom: 0.5em; }
+.chat-message p:last-child { margin-bottom: 0; }
+.chat-message ul, .chat-message ol { padding-left: 1.25em; margin-bottom: 0.5em; }
+.chat-message li { margin-bottom: 0.25em; list-style: disc; }
+.chat-message ol li { list-style: decimal; }
+.chat-message strong { color: var(--color-text-primary); font-weight: 600; }
+.chat-message code {
+  background: var(--color-surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+}
