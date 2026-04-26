@@ -14,7 +14,7 @@ export default function Header({ onExportCSV, onGenerateReport, onNewInspection,
           New Inspection
         </button>
         <div className="flex items-center gap-3">
-          <img src="/logo.png" alt="VoltHawk" style={{height: '48px'}} />
+          <img src="/logo.png" alt="VoltHawk" width="48" height="48" style={{height: '48px', width: 'auto', display: 'inline-block', objectFit: 'contain'}} />
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-text-primary">VoltHawk</h1>
             <p className="text-xs text-text-secondary">AI-Powered Transmission Line Inspection</p>
