@@ -18,7 +18,7 @@ export default function ProcessingScreen({ status, error, segmentCount }) {
   return (
     <div className="min-h-screen bg-surface-0 flex flex-col items-center justify-center p-8">
       <div className="flex items-center gap-3 mb-10">
-        <img src="/logo.png" alt="VoltHawk" width="56" height="56" className="shrink-0" style={{height: '56px', width: '56px', minWidth: '56px', objectFit: 'contain'}} />
+        <img src="/logo.png" alt="VoltHawk" width="80" height="80" className="shrink-0" style={{height: '80px', width: '80px', minWidth: '80px', objectFit: 'contain'}} />
         <h1 className="text-3xl font-bold tracking-tight">VoltHawk</h1>
       </div>
 
