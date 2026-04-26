@@ -104,14 +104,14 @@ export default function ChatPanel({ findings, maintenance }) {
   }
 
   return (
-    <div className="bg-surface-1 border border-border rounded-xl flex flex-col h-full min-h-[600px]">
+    <div className="bg-surface-1 border border-border rounded-xl flex flex-col">
       <div className="px-4 py-3 border-b border-border flex items-center gap-2">
         <Bot className="w-4 h-4 text-accent" />
         <h3 className="text-sm font-semibold text-text-primary">AI Inspection Co-Pilot</h3>
         <span className="ml-auto w-2 h-2 rounded-full bg-low animate-pulse" />
       </div>
 
-      <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div ref={scrollRef} className="overflow-y-auto p-4 space-y-4" style={{ maxHeight: 'calc(100vh - 300px)' }}>
         {messages.map((msg, i) => (
           <div key={i} className={`flex gap-3 ${msg.role === 'user' ? 'justify-end' : ''}`}>
             {msg.role === 'assistant' && (

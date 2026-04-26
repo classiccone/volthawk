@@ -247,7 +247,7 @@ export default function Home() {
           <MaintenanceCrossRef findings={findings} maintenance={maintenanceData} />
         </div>
         <div className="w-[35%]">
-          <div className="sticky top-4">
+          <div className="sticky top-20">
             <ChatPanel findings={findings} maintenance={maintenanceData} />
           </div>
         </div>
