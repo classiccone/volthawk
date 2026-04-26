@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { ChevronDown, ChevronRight, Play, X } from 'lucide-react'
 
 const SEVERITY_BADGE = {
@@ -22,6 +22,18 @@ const SEVERITY_OPTIONS = ['critical', 'high', 'moderate', 'low']
 export default function FindingsTable({ findings, escalations, videoUrl, onUpdateFinding }) {
   const [expandedId, setExpandedId] = useState(null)
   const [videoTime, setVideoTime] = useState(null)
+  const [savedId, setSavedId] = useState(null)
+  const saveTimerRef = useRef(null)
+
+  const handleNotesChange = useCallback((id, value) => {
+    onUpdateFinding(id, { notes: value })
+    if (saveTimerRef.current) clearTimeout(saveTimerRef.current)
+    setSavedId(null)
+    saveTimerRef.current = setTimeout(() => {
+      setSavedId(id)
+      setTimeout(() => setSavedId(prev => prev === id ? null : prev), 2000)
+    }, 500)
+  }, [onUpdateFinding])
   const sorted = [...findings].sort((a, b) => (SEVERITY_ORDER[a.severity] ?? 4) - (SEVERITY_ORDER[b.severity] ?? 4))
   const getEscalation = (findingId) => escalations.find(e => e.linked_finding_id === findingId)
 
@@ -95,11 +107,16 @@ export default function FindingsTable({ findings, escalations, videoUrl, onUpdat
                       </div>
                     </div>
                     <div>
-                      <p className="text-text-secondary text-xs uppercase tracking-wider mb-1">Inspector Notes</p>
+                      <div className="flex items-center gap-2 mb-1">
+                        <p className="text-text-secondary text-xs uppercase tracking-wider">Inspector Notes</p>
+                        {savedId === f.id && (
+                          <span className="text-xs text-green-500 font-medium animate-in fade-in">✓ Saved</span>
+                        )}
+                      </div>
                       <input
                         type="text"
                         value={f.notes || ''}
-                        onChange={(e) => onUpdateFinding(f.id, { notes: e.target.value })}
+                        onChange={(e) => handleNotesChange(f.id, e.target.value)}
                         placeholder="Add inspector notes..."
                         className="w-full px-3 py-2 text-sm bg-surface-1 border border-border rounded-lg text-text-primary placeholder:text-text-secondary/50 focus:outline-none focus:ring-1 focus:ring-accent"
                       />
