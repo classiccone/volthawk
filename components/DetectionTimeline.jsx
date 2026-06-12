@@ -12,7 +12,6 @@ function formatTime(seconds) {
 }
 
 export default function DetectionTimeline({ findings }) {
-  // Build ordered list of anomaly types present in findings
   const anomalyTypes = [...new Set(findings.map(f => f.anomaly_type))]
 
   const data = findings.map(f => ({
@@ -25,28 +24,28 @@ export default function DetectionTimeline({ findings }) {
   }))
 
   return (
-    <div className="bg-surface-1 border border-border rounded-xl p-5">
-      <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">Detection Timeline</h3>
-      <ResponsiveContainer width="100%" height={200}>
+    <div className="bg-surface-1 border border-border rounded-md p-4">
+      <h3 className="text-[11px] font-semibold text-text-secondary uppercase tracking-wider mb-3">Detection Timeline</h3>
+      <ResponsiveContainer width="100%" height={160}>
         <ScatterChart margin={{ left: 30, right: 20, top: 10, bottom: 10 }}>
-          <XAxis type="number" dataKey="x" domain={[0, 'dataMax + 10']} tickFormatter={formatTime} tick={{ fill: '#6b7280', fontSize: 12 }} axisLine={{ stroke: '#d1d5db' }} tickLine={false} label={{ value: 'Video Timestamp', position: 'bottom', fill: '#6b7280', fontSize: 11, offset: -2 }} />
-          <YAxis type="number" dataKey="y" domain={[-0.5, anomalyTypes.length - 0.5]} ticks={anomalyTypes.map((_, i) => i)} tickFormatter={i => ANOMALY_LABELS[anomalyTypes[i]] || anomalyTypes[i] || ''} tick={{ fill: '#111827', fontSize: 12 }} axisLine={false} tickLine={false} width={130} />
+          <XAxis type="number" dataKey="x" domain={[0, 'dataMax + 10']} tickFormatter={formatTime} tick={{ fill: '#6b7280', fontSize: 11 }} axisLine={{ stroke: '#d1d5db' }} tickLine={false} label={{ value: 'Video Timestamp', position: 'bottom', fill: '#6b7280', fontSize: 10, offset: -2 }} />
+          <YAxis type="number" dataKey="y" domain={[-0.5, anomalyTypes.length - 0.5]} ticks={anomalyTypes.map((_, i) => i)} tickFormatter={i => ANOMALY_LABELS[anomalyTypes[i]] || anomalyTypes[i] || ''} tick={{ fill: '#111827', fontSize: 11 }} axisLine={false} tickLine={false} width={120} />
           <Tooltip
             content={({ payload }) => {
               if (!payload?.length) return null
               const d = payload[0].payload
               return (
-                <div className="bg-surface-2 border border-border rounded-lg px-3 py-2 text-sm">
+                <div className="bg-surface-2 border border-border rounded px-3 py-2 text-xs">
                   <p className="font-semibold">Finding #{d.id}</p>
                   <p className="text-text-secondary">{d.type}</p>
                   <p className="text-text-secondary">{d.time}</p>
-                  <p className="font-mono text-xs mt-1" style={{ color: SEVERITY_COLORS[d.severity] }}>{d.severity.toUpperCase()}</p>
+                  <p className="font-mono mt-1" style={{ color: SEVERITY_COLORS[d.severity] }}>{d.severity.toUpperCase()}</p>
                 </div>
               )
             }}
           />
           <Scatter data={data}>
-            {data.map((entry, i) => <Cell key={i} fill={SEVERITY_COLORS[entry.severity]} r={8} />)}
+            {data.map((entry, i) => <Cell key={i} fill={SEVERITY_COLORS[entry.severity]} r={7} />)}
           </Scatter>
         </ScatterChart>
       </ResponsiveContainer>

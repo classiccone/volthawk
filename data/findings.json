@@ -41,12 +41,13 @@
       "query_used": "vegetation encroaching on transmission line corridor",
       "asset_type": "transmission_line",
       "condition": "vegetation_is_growing_close_to_the_conductors",
-      "severity": "high",
+      "severity": "moderate",
       "severity_label": "🟠 HIGH",
       "nerc_reference": "FAC-003-4 R3 clearance violation",
       "priority_hours": 720,
       "pegasus_confidence": 0.95,
-      "recommended_action": "trim_encroaching_vegetation_within_30_days"
+      "recommended_action": "trim_encroaching_vegetation_within_30_days",
+      "notes": "wrong \n"
     },
     {
       "id": 4,
@@ -57,12 +58,13 @@
       "query_used": "vegetation encroaching on transmission line corridor",
       "asset_type": "transmission line",
       "condition": "The insulators are in good condition without visible cracks, chips, contamination, or flashover marks. Vegetation is growing close to the conductors, posing a potential risk of encroachment that could lead to electrical faults or outages. The tower and structure show no signs of corrosion or damage.",
-      "severity": "high",
+      "severity": "critical",
       "severity_label": "🟠 HIGH",
       "nerc_reference": "FAC-003-4 R3 clearance violation",
       "priority_hours": 720,
       "pegasus_confidence": 0.9,
-      "recommended_action": "Address the vegetation encroachment within 30 days to prevent potential electrical faults or outages."
+      "recommended_action": "Address the vegetation encroachment within 30 days to prevent potential electrical faults or outages.",
+      "notes": "ok report\n"
     },
     {
       "id": 5,
@@ -110,7 +112,9 @@
       "nerc_reference": "FAC-003-4 preventive maintenance",
       "priority_hours": 2160,
       "pegasus_confidence": 0.95,
-      "recommended_action": "Routine maintenance and monitoring are recommended."
+      "recommended_action": "Routine maintenance and monitoring are recommended.",
+      "notes": "",
+      "notes_updated_at": null
     },
     {
       "id": 8,
@@ -142,7 +146,8 @@
       "nerc_reference": "FAC-003-4 preventive maintenance",
       "priority_hours": 2160,
       "pegasus_confidence": 0.85,
-      "recommended_action": "routine_maintenance"
+      "recommended_action": "routine_maintenance",
+      "notes": "wrong analysis, ignore this result\n"
     },
     {
       "id": 10,
@@ -222,7 +227,9 @@
       "nerc_reference": "FAC-003-4 R3 clearance violation",
       "priority_hours": 720,
       "pegasus_confidence": 0.95,
-      "recommended_action": "Schedule a high-priority inspection and repair for the tower structure within 30 days."
+      "recommended_action": "Schedule a high-priority inspection and repair for the tower structure within 30 days.",
+      "notes": "",
+      "notes_updated_at": null
     },
     {
       "id": 15,

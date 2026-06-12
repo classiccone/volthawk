@@ -1,32 +1,31 @@
 'use client'
 
-import { AlertTriangle, AlertCircle, Activity, DollarSign } from 'lucide-react'
 import { formatCurrency } from '../lib/riskCalculation'
 
 export default function KPICards({ findings, riskRange }) {
   const critical = findings.filter(f => f.severity === 'critical').length
   const high = findings.filter(f => f.severity === 'high').length
 
-  const cards = [
-    { label: 'Total Findings', value: findings.length, icon: Activity, accent: 'text-accent', leftBorder: 'border-l-accent' },
-    { label: 'Critical', value: critical, icon: AlertTriangle, accent: 'text-critical', leftBorder: 'border-l-critical' },
-    { label: 'High', value: high, icon: AlertCircle, accent: 'text-high', leftBorder: 'border-l-high' },
-    { label: 'Risk Exposure', value: `${formatCurrency(riskRange[0])} – ${formatCurrency(riskRange[1])}`, icon: DollarSign, accent: 'text-moderate', leftBorder: 'border-l-moderate', smallValue: true },
-  ]
-
   return (
-    <div className="grid grid-cols-4 gap-4 px-6 py-4">
-      {cards.map(card => (
-        <div key={card.label} className={`bg-surface-1 border border-border ${card.leftBorder} border-l-3 rounded-xl p-5 flex items-center gap-4`}>
-          <div className={`p-3 rounded-lg bg-surface-2 ${card.accent}`}>
-            <card.icon className="w-6 h-6" />
-          </div>
-          <div>
-            <p className="text-xs text-text-secondary font-medium uppercase tracking-wider">{card.label}</p>
-            <p className={`${card.smallValue ? 'text-xl' : 'text-3xl'} font-bold font-mono mt-1 ${card.accent}`}>{card.value}</p>
-          </div>
+    <div className="mx-6 my-3">
+      <div className="bg-surface-1 border border-border rounded-md px-5 py-2.5 flex items-center divide-x divide-border">
+        <div className="pr-6">
+          <p className="text-[10px] text-text-secondary uppercase tracking-wider">Total Findings</p>
+          <p className="text-lg font-semibold font-mono text-text-primary">{findings.length}</p>
         </div>
-      ))}
+        <div className="px-6">
+          <p className="text-[10px] text-text-secondary uppercase tracking-wider">Critical</p>
+          <p className={`text-lg font-semibold font-mono ${critical > 0 ? 'text-critical' : 'text-text-primary'}`}>{critical}</p>
+        </div>
+        <div className="px-6">
+          <p className="text-[10px] text-text-secondary uppercase tracking-wider">High</p>
+          <p className={`text-lg font-semibold font-mono ${high > 0 ? 'text-high' : 'text-text-primary'}`}>{high}</p>
+        </div>
+        <div className="pl-6">
+          <p className="text-[10px] text-text-secondary uppercase tracking-wider">Risk Exposure</p>
+          <p className="text-lg font-semibold font-mono text-text-primary">{formatCurrency(riskRange[0])} – {formatCurrency(riskRange[1])}</p>
+        </div>
+      </div>
     </div>
   )
 }

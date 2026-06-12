@@ -25,6 +25,7 @@ body {
   background-color: var(--color-surface-0);
   color: var(--color-text-primary);
   font-family: var(--font-sans);
+  font-size: 13px;
 }
 
 ::-webkit-scrollbar { width: 6px; }

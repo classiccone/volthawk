@@ -13,14 +13,14 @@ export default function SeverityChart({ findings }) {
     .map(s => ({ severity: s.charAt(0).toUpperCase() + s.slice(1), count: counts[s] || 0, key: s }))
 
   return (
-    <div className="bg-surface-1 border border-border rounded-xl p-5">
-      <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">Severity Distribution</h3>
-      <ResponsiveContainer width="100%" height={180}>
+    <div className="bg-surface-1 border border-border rounded-md p-4">
+      <h3 className="text-[11px] font-semibold text-text-secondary uppercase tracking-wider mb-3">Severity Distribution</h3>
+      <ResponsiveContainer width="100%" height={140}>
         <BarChart data={data} layout="vertical" margin={{ left: 20, right: 20, top: 0, bottom: 0 }}>
-          <XAxis type="number" allowDecimals={false} tick={{ fill: '#6b7280', fontSize: 12 }} axisLine={false} tickLine={false} />
-          <YAxis type="category" dataKey="severity" tick={{ fill: '#111827', fontSize: 13, fontWeight: 500 }} axisLine={false} tickLine={false} width={80} />
-          <Tooltip contentStyle={{ background: '#ffffff', border: '1px solid #d1d5db', borderRadius: 8, color: '#111827', fontSize: 13 }} cursor={{ fill: 'rgba(0,0,0,0.03)' }} />
-          <Bar dataKey="count" radius={[0, 6, 6, 0]} barSize={24}>
+          <XAxis type="number" allowDecimals={false} tick={{ fill: '#6b7280', fontSize: 11 }} axisLine={false} tickLine={false} />
+          <YAxis type="category" dataKey="severity" tick={{ fill: '#111827', fontSize: 12, fontWeight: 500 }} axisLine={false} tickLine={false} width={80} />
+          <Tooltip contentStyle={{ background: '#ffffff', border: '1px solid #d1d5db', borderRadius: 4, color: '#111827', fontSize: 12 }} cursor={{ fill: 'rgba(0,0,0,0.03)' }} />
+          <Bar dataKey="count" radius={[0, 3, 3, 0]} barSize={18}>
             {data.map(entry => <Cell key={entry.key} fill={SEVERITY_COLORS[entry.key]} />)}
           </Bar>
         </BarChart>

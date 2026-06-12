@@ -11,7 +11,10 @@ import FindingsTable from '../components/FindingsTable'
 import MaintenanceCrossRef from '../components/MaintenanceCrossRef'
 import ChatPanel from '../components/ChatPanel'
 import Footer from '../components/Footer'
+import dynamic from 'next/dynamic'
 import { getTotalRiskExposure } from '../lib/riskCalculation'
+
+const CorridorMap = dynamic(() => import('../components/CorridorMap'), { ssr: false })
 import { exportCSV } from '../lib/exportCSV'
 import { generateReport } from '../lib/generateReport'
 import maintenanceData from '../data/maintenance.json'
@@ -150,8 +153,22 @@ export default function Home() {
     setSegmentCount(0)
   }
 
+  const saveTimerRef = useRef(null)
+  const findingsRef = useRef(findings)
+  findingsRef.current = findings
+
   function handleUpdateFinding(id, updates) {
     setFindings(prev => prev.map(f => f.id === id ? { ...f, ...updates } : f))
+    // Debounced persist so notes survive reload
+    if (saveTimerRef.current) clearTimeout(saveTimerRef.current)
+    saveTimerRef.current = setTimeout(() => {
+      const latest = findingsRef.current
+      fetch('/api/findings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ findings: latest, videoName, analysisDate }),
+      }).catch(() => {})
+    }, 800)
   }
 
   if (screen === 'loading') {
@@ -190,9 +207,9 @@ export default function Home() {
         analysisDate={analysisDate}
       />
       {!videoUrl && (
-        <div className="mx-6 mt-4 px-4 py-3 bg-amber-500/10 border border-amber-500/30 rounded-lg flex items-center justify-between">
-          <span className="text-sm text-amber-600 font-medium">Video not attached — attach for evidence playback</span>
-          <label className="px-4 py-1.5 text-xs font-medium bg-amber-500 text-white rounded-lg cursor-pointer hover:bg-amber-600 transition-colors">
+        <div className="mx-6 mt-3 px-4 py-2.5 border border-amber-500/30 rounded-md flex items-center justify-between">
+          <span className="text-xs text-amber-600 font-medium">Video not attached — attach for evidence playback</span>
+          <label className="px-3 py-1 text-[11px] font-medium bg-amber-500 text-white rounded cursor-pointer hover:bg-amber-600 transition-colors">
             Attach Video
             <input
               type="file"
@@ -209,40 +226,49 @@ export default function Home() {
       <KPICards findings={findings} riskRange={riskRange} />
 
       {/* NERC Compliance Status */}
-      <div className="px-6 pb-4">
-        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-3">NERC Compliance Status</h3>
-        <div className="grid grid-cols-3 gap-4">
-          <div className="bg-surface-1 border border-border rounded-xl p-5">
-            <p className="text-xs text-text-secondary font-medium uppercase tracking-wider">FAC-003-4 Vegetation</p>
-            <p className="text-2xl font-bold font-mono mt-1 text-text-primary">{vegFindings.length} <span className="text-sm font-normal text-text-secondary">findings</span></p>
-            {vegHighCrit > 0 && <p className="text-xs text-text-secondary mt-1">{vegHighCrit} high/critical</p>}
-            <span className={`inline-block mt-2 px-2.5 py-1 text-xs font-bold uppercase tracking-wide rounded-md border ${vegHighCrit > 0 ? 'bg-critical/10 text-critical border-critical/30' : 'bg-green-500/10 text-green-600 border-green-500/30'}`}>
-              {vegHighCrit > 0 ? 'Violations Found' : 'Compliant'}
-            </span>
+      <div className="px-6 pb-3">
+        <h3 className="text-[11px] font-semibold text-text-secondary uppercase tracking-wider mb-2">NERC Compliance Status</h3>
+        <div className="grid grid-cols-3 gap-3">
+          <div className="bg-surface-1 border border-border rounded-md px-4 py-3">
+            <div className="flex items-center justify-between">
+              <p className="text-[10px] text-text-secondary font-medium uppercase tracking-wider">FAC-003-4 Vegetation</p>
+              <span className={`px-2 py-0.5 text-[11px] font-bold uppercase rounded border ${vegHighCrit > 0 ? 'text-critical border-critical' : 'text-low border-low'}`}>
+                {vegHighCrit > 0 ? 'Violations' : 'Compliant'}
+              </span>
+            </div>
+            <p className="text-lg font-bold font-mono mt-1 text-text-primary">{vegFindings.length} <span className="text-xs font-normal text-text-secondary">findings</span>{vegHighCrit > 0 && <span className="text-xs font-normal text-text-secondary"> · {vegHighCrit} high/crit</span>}</p>
           </div>
-          <div className="bg-surface-1 border border-border rounded-xl p-5">
-            <p className="text-xs text-text-secondary font-medium uppercase tracking-wider">FAC-501-3 Structural</p>
-            <p className="text-2xl font-bold font-mono mt-1 text-text-primary">{structFindings.length} <span className="text-sm font-normal text-text-secondary">findings</span></p>
-            {structHighCrit > 0 && <p className="text-xs text-text-secondary mt-1">{structHighCrit} high/critical</p>}
-            <span className={`inline-block mt-2 px-2.5 py-1 text-xs font-bold uppercase tracking-wide rounded-md border ${structHighCrit > 0 ? 'bg-critical/10 text-critical border-critical/30' : 'bg-green-500/10 text-green-600 border-green-500/30'}`}>
-              {structHighCrit > 0 ? 'Violations Found' : 'Compliant'}
-            </span>
+          <div className="bg-surface-1 border border-border rounded-md px-4 py-3">
+            <div className="flex items-center justify-between">
+              <p className="text-[10px] text-text-secondary font-medium uppercase tracking-wider">FAC-501-3 Structural</p>
+              <span className={`px-2 py-0.5 text-[11px] font-bold uppercase rounded border ${structHighCrit > 0 ? 'text-critical border-critical' : 'text-low border-low'}`}>
+                {structHighCrit > 0 ? 'Violations' : 'Compliant'}
+              </span>
+            </div>
+            <p className="text-lg font-bold font-mono mt-1 text-text-primary">{structFindings.length} <span className="text-xs font-normal text-text-secondary">findings</span>{structHighCrit > 0 && <span className="text-xs font-normal text-text-secondary"> · {structHighCrit} high/crit</span>}</p>
           </div>
-          <div className="bg-surface-1 border border-border rounded-xl p-5">
-            <p className="text-xs text-text-secondary font-medium uppercase tracking-wider">NESC Rule 215 Insulators</p>
-            <p className="text-2xl font-bold font-mono mt-1 text-text-primary">{insulatorFindings.length} <span className="text-sm font-normal text-text-secondary">findings</span></p>
-            {insulatorHighCrit > 0 && <p className="text-xs text-text-secondary mt-1">{insulatorHighCrit} high/critical</p>}
-            <span className={`inline-block mt-2 px-2.5 py-1 text-xs font-bold uppercase tracking-wide rounded-md border ${insulatorHighCrit > 0 ? 'bg-critical/10 text-critical border-critical/30' : 'bg-green-500/10 text-green-600 border-green-500/30'}`}>
-              {insulatorHighCrit > 0 ? 'Violations Found' : 'Compliant'}
-            </span>
+          <div className="bg-surface-1 border border-border rounded-md px-4 py-3">
+            <div className="flex items-center justify-between">
+              <p className="text-[10px] text-text-secondary font-medium uppercase tracking-wider">NESC Rule 215 Insulators</p>
+              <span className={`px-2 py-0.5 text-[11px] font-bold uppercase rounded border ${insulatorHighCrit > 0 ? 'text-critical border-critical' : 'text-low border-low'}`}>
+                {insulatorHighCrit > 0 ? 'Violations' : 'Compliant'}
+              </span>
+            </div>
+            <p className="text-lg font-bold font-mono mt-1 text-text-primary">{insulatorFindings.length} <span className="text-xs font-normal text-text-secondary">findings</span>{insulatorHighCrit > 0 && <span className="text-xs font-normal text-text-secondary"> · {insulatorHighCrit} high/crit</span>}</p>
           </div>
         </div>
       </div>
 
-      <div className="flex-1 px-6 pb-6 flex gap-5">
-        <div className="w-[65%] space-y-5">
+      <div className="flex-1 px-6 pb-4 flex gap-4">
+        <div className="w-[65%] space-y-4">
           <SeverityChart findings={findings} />
           <DetectionTimeline findings={findings} />
+          <div className="bg-surface-1 border border-border rounded-md p-4">
+            <h3 className="text-[11px] font-semibold text-text-secondary uppercase tracking-wider mb-2">Corridor Map</h3>
+            <div className="h-[320px] rounded-md overflow-hidden">
+              <CorridorMap findings={findings} maintenance={maintenanceData} />
+            </div>
+          </div>
           <FindingsTable findings={findings} escalations={escalations} videoUrl={videoUrl} onUpdateFinding={handleUpdateFinding} />
           <MaintenanceCrossRef findings={findings} maintenance={maintenanceData} />
         </div>
